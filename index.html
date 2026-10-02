@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GRNLR_2002</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar panel">
+      <div>
+        <div class="eyebrow">LOCAL AUDIO LAB / 2002</div>
+        <h1>GRNLR_2002</h1>
+      </div>
+      <div class="transport">
+        <label>BPM <input id="bpm" type="number" min="40" max="240" value="138" /></label>
+        <button id="playBtn" class="btn primary" disabled>▶ PLAY</button>
+        <button id="stopBtn" class="btn" disabled>■ STOP</button>
+      </div>
+    </header>
+
+    <section class="panel drop-panel">
+      <div id="dropZone" class="drop-zone">
+        <input id="fileInput" type="file" accept="audio/*" hidden />
+        <button id="loadBtn" class="btn primary">LOAD MP3 / WAV</button>
+        <div class="muted">or drop audio here — files stay on your device</div>
+      </div>
+      <div class="wave-wrap">
+        <canvas id="waveform" width="1400" height="220"></canvas>
+        <div id="playhead" class="playhead"></div>
+        <div id="region" class="region"></div>
+      </div>
+      <div class="file-row">
+        <span id="fileName">NO SAMPLE LOADED</span>
+        <span id="timeReadout">00:00.000 / 00:00.000</span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head"><span>GRAIN ENGINE</span><span class="status" id="engineStatus">IDLE</span></div>
+      <div class="knob-grid" id="grainKnobs">
+        <div class="knob-control" data-param="grainSize" data-min="20" data-max="500" data-step="1" data-value="120" data-unit="ms" data-label="SIZE"></div>
+        <div class="knob-control" data-param="density" data-min="2" data-max="60" data-step="1" data-value="18" data-unit="/s" data-label="DENSITY"></div>
+        <div class="knob-control" data-param="position" data-min="0" data-max="100" data-step="0.1" data-value="20" data-unit="%" data-label="POSITION"></div>
+        <div class="knob-control" data-param="spray" data-min="0" data-max="100" data-step="0.1" data-value="12" data-unit="%" data-label="SPRAY"></div>
+        <div class="knob-control" data-param="pitch" data-min="-24" data-max="24" data-step="1" data-value="0" data-unit="st" data-label="PITCH"></div>
+        <div class="knob-control" data-param="jitter" data-min="0" data-max="12" data-step="0.1" data-value="0.5" data-unit="st" data-label="JITTER"></div>
+        <div class="knob-control" data-param="spread" data-min="0" data-max="100" data-step="1" data-value="70" data-unit="%" data-label="SPACE"></div>
+        <div class="knob-control" data-param="reverseChance" data-min="0" data-max="100" data-step="1" data-value="15" data-unit="%" data-label="REVERSE"></div>
+        <div class="knob-control" data-param="stretch" data-min="0.2" data-max="2.5" data-step="0.01" data-value="1" data-unit="x" data-label="STRETCH"></div>
+        <div class="knob-control" data-param="wet" data-min="0" data-max="100" data-step="1" data-value="100" data-unit="%" data-label="GRAIN MIX"></div>
+      </div>
+      <div class="button-row">
+        <button id="freezeBtn" class="btn toggle">FREEZE</button>
+        <button id="chaosBtn" class="btn toggle">CHAOS</button>
+        <button id="randomizeBtn" class="btn">RANDOMIZE</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head"><span>STUTTER / RETRIGGER</span><span class="muted">tempo locked</span></div>
+      <div class="division-row" id="divisionRow">
+        <button class="division active" data-div="8">1/8</button>
+        <button class="division" data-div="16">1/16</button>
+        <button class="division" data-div="32">1/32</button>
+        <button class="division" data-div="64">1/64</button>
+        <button class="division" data-div="12">1/8T</button>
+        <button class="division" data-div="24">1/16T</button>
+      </div>
+      <div class="knob-grid compact">
+        <div class="knob-control" data-param="stutterChance" data-min="0" data-max="100" data-step="1" data-value="0" data-unit="%" data-label="CHANCE"></div>
+        <div class="knob-control" data-param="gate" data-min="5" data-max="100" data-step="1" data-value="45" data-unit="%" data-label="GATE"></div>
+        <div class="knob-control" data-param="repeatCount" data-min="1" data-max="8" data-step="1" data-value="3" data-unit="x" data-label="REPEATS"></div>
+        <div class="knob-control" data-param="pitchRamp" data-min="-12" data-max="12" data-step="1" data-value="0" data-unit="st" data-label="PITCH RAMP"></div>
+      </div>
+      <div class="button-row">
+        <button id="stutterHoldBtn" class="btn toggle">HOLD STUTTER</button>
+        <button id="glitchBtn" class="btn toggle">GLITCH AUTO</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head"><span>DIGITAL FX</span><span class="muted">post grain</span></div>
+      <div class="knob-grid compact">
+        <div class="knob-control" data-param="filter" data-min="300" data-max="18000" data-step="10" data-value="15000" data-unit="Hz" data-label="FILTER"></div>
+        <div class="knob-control" data-param="drive" data-min="0" data-max="100" data-step="1" data-value="5" data-unit="%" data-label="DRIVE"></div>
+        <div class="knob-control" data-param="delay" data-min="0" data-max="70" data-step="1" data-value="12" data-unit="%" data-label="DELAY"></div>
+        <div class="knob-control" data-param="feedback" data-min="0" data-max="85" data-step="1" data-value="30" data-unit="%" data-label="FEEDBACK"></div>
+        <div class="knob-control" data-param="reverb" data-min="0" data-max="100" data-step="1" data-value="30" data-unit="%" data-label="REVERB"></div>
+        <div class="knob-control" data-param="flange" data-min="0" data-max="100" data-step="1" data-value="8" data-unit="%" data-label="FLANGE"></div>
+      </div>
+    </section>
+
+    <section class="panel preset-panel">
+      <div class="section-head"><span>PRESET MATRIX</span><span class="muted">sound-first presets</span></div>
+      <div class="preset-grid" id="presetGrid">
+        <button data-preset="digitalAngel">DIGITAL ANGEL</button>
+        <button data-preset="y2kVocal">Y2K VOCAL</button>
+        <button data-preset="brokenCd">BROKEN CD</button>
+        <button data-preset="silverPad">SILVER PAD</button>
+        <button data-preset="vocalShred">VOCAL SHREDDER</button>
+        <button data-preset="glassChoir">GLASS CHOIR</button>
+        <button data-preset="microStutter">MICRO STUTTER</button>
+        <button data-preset="heavenGate">HEAVEN GATE</button>
+      </div>
+      <div class="footer-row">
+        <span id="presetName">PRESET: INIT</span>
+        <button id="recordBtn" class="btn" disabled>● RECORD OUTPUT</button>
+        <a id="downloadLink" class="btn hidden" download="grnlr-output.webm">DOWNLOAD</a>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
